@@ -1,3 +1,0 @@
-# Cloudflare Pages redirects
-# Redirect www to the apex domain (301 permanent).
-https://www.usehighlighted.com/* https://usehighlighted.com/:splat 301

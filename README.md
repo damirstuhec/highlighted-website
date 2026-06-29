@@ -33,7 +33,10 @@ There is no build process — Cloudflare just serves the files as-is.
 (nameservers changed at Porkbun to point at Cloudflare). The domain is attached
 under the Pages project → Custom domains. HTTPS is provisioned automatically.
 
-`www.usehighlighted.com` redirects to the apex via the `_redirects` file.
+`www.usehighlighted.com` redirects to the apex. Set this up as a **Redirect Rule**
+in the Cloudflare dashboard (Rules → Redirect Rules): redirect
+`www.usehighlighted.com/*` to `https://usehighlighted.com/$1` (301). A relative
+`_redirects` file cannot do a cross-hostname redirect, so it lives in the dashboard.
 
 ---
 
@@ -92,8 +95,9 @@ assets/
   qr.png                App Store QR code (reference; also embedded in HTML).
   appstore-badge.svg    Official Apple download badge (reference; also embedded).
   icons/                "How it works" section glyphs (reference; embedded via CSS).
-_redirects              Cloudflare: www → apex redirect.
 _headers                Cloudflare: caching + security headers.
+wrangler.jsonc          Worker/Pages config (asset directory).
+.assetsignore           Files NOT to serve publicly (.git, README, etc.).
 .gitignore
 ```
 
