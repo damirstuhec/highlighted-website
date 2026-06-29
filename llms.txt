@@ -1,0 +1,27 @@
+# Highlighted
+
+> Highlighted is an iOS app that lets you capture passages from physical books using your iPhone camera, organise them into a searchable library, and revisit the ideas worth remembering.
+
+## About
+
+Highlighted is made by an independent creator in Slovenia. It has been trusted by 150,000+ readers, rated ★ 4.9 on the App Store, and named App of the Day by Apple four times.
+
+## Key features
+
+- Camera-based text capture: point your camera at any line in a physical book to extract the exact sentence or paragraph
+- Searchable library: every highlight is stored under its book with page numbers, notes, tags, and collections
+- Revisit system: reminders and Home Screen widgets resurface old highlights at the right moment
+- Share and export: generate quote cards or export in bulk to Notion, Obsidian, and more
+- Highlighted+: optional premium tier with power features
+
+## App Store
+
+- Platform: iOS
+- Price: Free (Highlighted+ is optional)
+- Rating: 4.9 / 5
+- Link: https://apps.apple.com/app/id1480216009
+
+## Legal
+
+- Privacy Policy: https://usehighlighted.com/privacy
+- Terms of Service: https://usehighlighted.com/terms
