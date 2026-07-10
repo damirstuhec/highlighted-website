@@ -129,16 +129,6 @@
     box-shadow:0 30px 70px -18px rgba(18,18,18,.4),0 10px 24px rgba(18,18,18,.18);
   }
   .hero-video video,.hero-video iframe{width:100%;height:100%;object-fit:cover;border:0;display:block}
-  .hero-video-ph{
-    position:absolute;inset:0;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:16px;text-align:center;padding:26px;
-    background:
-      radial-gradient(circle at 30% 30%,rgba(255,204,0,.16),transparent 60%),
-      linear-gradient(160deg,#1c1c1c,#0a0a0a);
-    color:rgba(250,247,240,.6);
-  }
-  .hero-video-ph .vp-note{font-size:12px;letter-spacing:.02em;line-height:1.5}
-  .hero-video-ph code{background:rgba(250,247,240,.1);padding:2px 7px;border-radius:5px;color:var(--yellow);font-size:11px}
 
   /* ---------- Logo strip / proof bar ---------- */
   .proof{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--cream-deep)}
@@ -185,14 +175,6 @@
   .how .step .ico{background-color:var(--yellow)}
   .how .step h3{color:var(--cream)}
   .how .step p{color:rgba(250,247,240,.62)}
-
-  /* play button (hero video placeholder) */
-  .play{
-    width:74px;height:74px;border-radius:50%;background:var(--yellow);color:var(--ink);
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 10px 30px rgba(255,204,0,.4);
-  }
-  .play svg{width:28px;height:28px;margin-left:4px}
 
   /* ---------- Final CTA ---------- */
   .final{text-align:center;padding:80px 0}
@@ -318,22 +300,9 @@
 
       <div class="hero-video-stage reveal">
         <div class="hero-video">
-          <!--
-            ===========================================================
-            DROP YOUR PORTRAIT APP PREVIEW VIDEO HERE (replaces the placeholder).
-            Example:
-              <video controls autoplay muted loop playsinline poster="assets/poster.jpg">
-                <source src="assets/highlighted-demo.mp4" type="video/mp4">
-              </video>
-            Then delete the .hero-video-ph block below.
-            ===========================================================
-          -->
-          <div class="hero-video-ph" id="heroVideoPh" role="img" aria-label="App preview video coming soon">
-            <div class="play" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <div class="vp-note">Your App Store preview video<br><code>assets/highlighted-demo.mp4</code></div>
-          </div>
+          <video autoplay muted loop playsinline poster="/assets/preview-poster.jpg">
+            <source src="/assets/preview.mp4" type="video/mp4">
+          </video>
         </div>
       </div>
     </div>
