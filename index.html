@@ -125,9 +125,11 @@
   }
   .hero-video{
     position:relative;z-index:1;width:266px;aspect-ratio:9/19.5;
-    overflow:hidden;
+    filter:drop-shadow(0 26px 60px rgba(18,18,18,.19)) drop-shadow(0 8px 20px rgba(18,18,18,.08));
+  }
+  .hero-video-inner{
+    width:100%;height:100%;overflow:hidden;
     clip-path:path('M 44 0 L 222 0 C 257.2 0 266 8.8 266 44 L 266 532 C 266 567.2 257.2 576 222 576 L 44 576 C 8.8 576 0 567.2 0 532 L 0 44 C 0 8.8 8.8 0 44 0 Z');
-    filter:drop-shadow(0 26px 60px rgba(18,18,18,.38)) drop-shadow(0 8px 20px rgba(18,18,18,.16));
   }
   .hero-video video,.hero-video iframe{width:100%;height:100%;object-fit:cover;border:0;display:block}
 
@@ -301,9 +303,11 @@
 
       <div class="hero-video-stage reveal">
         <div class="hero-video">
-          <video autoplay muted loop playsinline poster="/assets/preview-poster.jpg">
-            <source src="/assets/preview.mp4" type="video/mp4">
-          </video>
+          <div class="hero-video-inner">
+            <video autoplay muted loop playsinline poster="/assets/preview-poster.jpg">
+              <source src="/assets/preview.mp4" type="video/mp4">
+            </video>
+          </div>
         </div>
       </div>
     </div>
