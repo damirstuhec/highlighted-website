@@ -1,8 +1,8 @@
 # Highlighted — Landing Page
 
-Marketing site for the Highlighted iOS app. A single static `index.html` (CSS and
-JS inline, images embedded as data URIs) plus an `assets/` folder. No build step,
-no framework, no dependencies.
+Marketing site for the Highlighted iOS app, plus the minimal Cloudflare Pages
+Function that serves opt-in personal book-highlight pages. There is no application
+framework or build step.
 
 Live: https://usehighlighted.com
 
@@ -89,7 +89,12 @@ The hero currently shows a placeholder where the portrait app-preview video goes
 ```
 index.html              The entire site (inline CSS/JS; icon, QR, App Store badge
                         embedded as data URIs — page renders without assets/).
+functions/books/         Validates public links and privately proxies rendering to
+                        the Highlighted server. Tokens never appear in origin URLs.
+_routes.json             Runs the Pages Function only for /books/*.
 assets/
+  published-book-page.css
+                        Shared, app-matched styling for published highlight pages.
   highlighted-demo.mp4  App preview video (add when ready).
   icon*.png             App icon, various sizes (reference / favicons).
   qr.png                App Store QR code (reference; also embedded in HTML).
@@ -97,6 +102,7 @@ assets/
   icons/                "How it works" section glyphs (reference; embedded via CSS).
 _headers                Cloudflare: caching + security headers.
 wrangler.jsonc          Worker/Pages config (asset directory).
+package.json            Dependency-free Node test command (`npm test`).
 .assetsignore           Files NOT to serve publicly (.git, README, etc.).
 .gitignore
 ```
@@ -105,3 +111,11 @@ wrangler.jsonc          Worker/Pages config (asset directory).
 > in `index.html` as data URIs, so the page is fully self-contained. The copies in
 > `assets/` are kept for reference and as source files. The one file the page
 > genuinely loads at runtime is the video, once added.
+
+The Pages deployment needs three environment variables: `PUBLISHED_BOOK_ORIGIN`
+(the HTTPS server origin), `PUBLISHED_BOOK_PROXY_SECRET` (a shared high-entropy
+secret), and optionally `APP_STORE_URL` (defaults to Highlighted's current App
+Store URL). Configure the same proxy secret on the server. Run `npm test` to test
+the public routing and privacy boundary. The Function also applies coarse
+per-isolate request limits; retain Cloudflare's managed abuse controls as the
+outer production defense.

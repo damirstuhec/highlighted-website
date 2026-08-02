@@ -1,0 +1,313 @@
+:root {
+  color-scheme: light dark;
+  --paper: #faf7f0;
+  --primary: #000;
+  --secondary: rgba(60, 60, 67, 0.6);
+  --secondary-fill: rgba(120, 120, 128, 0.16);
+  --separator: rgba(60, 60, 67, 0.29);
+  --brown: #a2845e;
+  --yellow: #ffcc00;
+  --card: rgba(255, 255, 255, 0.72);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  background: var(--paper);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--primary);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.47;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+.site-header {
+  height: 64px;
+  border-bottom: 0.5px solid var(--separator);
+}
+
+.site-header,
+.book-page,
+.unavailable-page {
+  width: min(100% - 32px, 720px);
+  margin-inline: auto;
+}
+
+.brand {
+  display: inline-flex;
+  height: 64px;
+  align-items: center;
+  gap: 10px;
+  font-family: ui-serif, "New York", Georgia, serif;
+  font-size: 19px;
+  text-decoration: none;
+}
+
+.brand img { border-radius: 8px; }
+
+.book-page { padding: 28px 0 64px; }
+
+.book-header {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  padding: 0 18px 20px;
+}
+
+.book-cover {
+  width: 112px;
+  aspect-ratio: 2 / 3;
+  border-radius: 7px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  object-fit: cover;
+}
+
+.generated-cover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 13px;
+  color: #fff;
+  font-family: ui-serif, "New York", Georgia, serif;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.16;
+  text-align: center;
+}
+
+.generated-0 { background: linear-gradient(145deg, #335c67, #14213d); }
+.generated-1 { background: linear-gradient(145deg, #9b5de5, #4a2c6f); }
+.generated-2 { background: linear-gradient(145deg, #2a9d8f, #285943); }
+.generated-3 { background: linear-gradient(145deg, #e76f51, #8c2f39); }
+.generated-4 { background: linear-gradient(145deg, #457b9d, #1d3557); }
+.generated-5 { background: linear-gradient(145deg, #6d597a, #355070); }
+
+.book-info { min-width: 0; padding-top: 2px; }
+
+h1 {
+  margin: 0;
+  font-family: ui-serif, "New York", Georgia, serif;
+  font-size: clamp(25px, 5vw, 34px);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+}
+
+.authors,
+.byline,
+.highlight-count {
+  color: var(--secondary);
+}
+
+.authors { margin: 7px 0 0; }
+
+.book-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 13px;
+}
+
+.metadata-chip {
+  border-radius: 999px;
+  background: var(--secondary-fill);
+  padding: 4px 9px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.byline { margin: 13px 0 0; font-size: 13px; }
+
+.book-divider {
+  height: 0.5px;
+  margin-left: 34px;
+  background: var(--separator);
+}
+
+.highlight-count {
+  margin: 14px 16px 2px;
+  font-size: 13px;
+}
+
+.highlight-row { padding: 16px; }
+
+.highlight-text-wrap { position: relative; }
+
+.highlight-line {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  border-radius: 2px;
+  background: var(--secondary-fill);
+}
+
+.highlight-line.favorite { background: var(--yellow); }
+
+.highlight-text,
+.highlight-page,
+.highlight-note {
+  margin: 0 0 0 18px;
+}
+
+.highlight-text {
+  padding-bottom: 8px;
+  font-size: 17px;
+  line-height: 1.62;
+  white-space: pre-wrap;
+}
+
+.highlight-page,
+.highlight-note {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.highlight-page { color: var(--secondary); }
+
+.highlight-note {
+  color: var(--brown);
+  font-weight: 500;
+  white-space: pre-wrap;
+}
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 0 18px;
+}
+
+.tag {
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.35;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.tag-blue { color: #007aff; }
+.tag-red { color: #ff3b30; }
+.tag-green { color: #34c759; }
+.tag-orange { color: #ff9500; }
+.tag-indigo { color: #5856d6; }
+.tag-pink { color: #ff2d55; }
+.tag-purple { color: #af52de; }
+.tag-yellow { color: #b78a00; }
+.tag-teal { color: #30b0c7; }
+.tag-gray { color: #8e8e93; }
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 24px;
+  margin: 18px 16px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.pagination a:last-child { margin-left: auto; }
+
+.app-cta {
+  margin: 38px 16px 0;
+  border-radius: 16px;
+  background: var(--card);
+  padding: 22px;
+  text-align: center;
+}
+
+.app-cta p { margin: 0 0 15px; }
+
+.cta-button {
+  display: inline-block;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--paper);
+  padding: 10px 17px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.unavailable-page {
+  display: grid;
+  min-height: calc(100vh - 64px);
+  place-items: center;
+  padding: 40px 16px 100px;
+  text-align: center;
+}
+
+.unavailable-page h1 {
+  font-family: inherit;
+  font-size: 28px;
+}
+
+.unavailable-page p { color: var(--secondary); }
+
+.text-link { font-weight: 600; }
+
+a:focus-visible {
+  border-radius: 4px;
+  outline: 3px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+@media (max-width: 520px) {
+  .site-header,
+  .book-page,
+  .unavailable-page { width: 100%; }
+
+  .site-header { padding-inline: 16px; }
+
+  .book-page { padding-top: 20px; }
+
+  .book-header {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 16px;
+    padding-inline: 16px;
+  }
+
+  .book-cover { width: 88px; }
+
+  .generated-cover {
+    padding: 8px;
+    font-size: 13px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #000;
+    --primary: #fff;
+    --secondary: rgba(235, 235, 245, 0.6);
+    --secondary-fill: rgba(120, 120, 128, 0.36);
+    --separator: rgba(84, 84, 88, 0.65);
+    --brown: #ac8e68;
+    --card: rgba(28, 28, 30, 0.86);
+  }
+
+  .tag-yellow { color: #ffd60a; }
+  .tag-blue { color: #0a84ff; }
+  .tag-red { color: #ff453a; }
+  .tag-green { color: #30d158; }
+  .tag-orange { color: #ff9f0a; }
+  .tag-indigo { color: #5e5ce6; }
+  .tag-pink { color: #ff375f; }
+  .tag-purple { color: #bf5af2; }
+  .tag-teal { color: #64d2ff; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

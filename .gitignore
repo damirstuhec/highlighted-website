@@ -7,6 +7,7 @@ Icon
 # Logs / temp
 *.log
 *.tmp
+.wrangler/
 
 # Editor
 .vscode/
