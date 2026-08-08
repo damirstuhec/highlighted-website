@@ -13,6 +13,7 @@ export async function onRequest(context) {
 
   const token = parts[1];
   if (parts.length === 3 && parts[2] === "download") {
+    if (context.request.method !== "GET") return unavailableResponse();
     return downloadResponse(context, token);
   }
   if (parts.length !== 2 || context.request.method !== "GET") {
@@ -32,6 +33,8 @@ async function renderResponse(context, token, page) {
   const endpoint = originEndpoint(context.env, "/web/published-book-pages/render");
   if (!endpoint) return unavailableResponse();
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8_000);
   try {
     const response = await fetch(endpoint, {
       method: "POST",
@@ -41,9 +44,10 @@ async function renderResponse(context, token, page) {
       },
       body: JSON.stringify({ token, page }),
       redirect: "manual",
+      signal: controller.signal,
     });
 
-    if (response.status >= 300 && response.status < 400) {
+    if (response.status !== 200 && response.status !== 404) {
       return unavailableResponse();
     }
 
@@ -52,6 +56,8 @@ async function renderResponse(context, token, page) {
     return new Response(response.body, { status: response.status, headers });
   } catch {
     return unavailableResponse();
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
@@ -145,7 +151,7 @@ function rateLimitedResponse() {
 }
 
 function unavailableResponse(status = 404) {
-  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><title>Page unavailable · Highlighted</title><link rel="stylesheet" href="/assets/published-book-page.css"></head><body><header class="site-header"><a class="brand" href="https://usehighlighted.com" aria-label="Highlighted home"><img src="/assets/icon-180.png" width="32" height="32" alt=""><span>highlighted</span></a></header><main class="unavailable-page"><div><h1>Page unavailable</h1><p>This Highlighted page may have been unpublished or its link may have changed.</p><a class="text-link" href="https://usehighlighted.com">Learn more about Highlighted</a></div></main></body></html>`;
+  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="theme-color" content="#FAF7F0"><title>Page unavailable · Highlighted</title><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/published-book-page.css?v=18"></head><body><main class="unavailable-page"><div><h1>Page unavailable</h1><p>This Highlighted page may have been unpublished or its link may have changed.</p><a class="text-link" href="https://usehighlighted.com">Learn more about Highlighted</a></div></main></body></html>`;
   const headers = publicHeaders();
   headers.set("Content-Type", "text/html; charset=utf-8");
   return new Response(html, { status, headers });
@@ -154,7 +160,7 @@ function unavailableResponse(status = 404) {
 function publicHeaders() {
   return new Headers({
     "Cache-Control": "private, no-store",
-    "Content-Security-Policy": "default-src 'none'; style-src 'self'; img-src 'self' https: data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+    "Content-Security-Policy": "default-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
     "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
     "Referrer-Policy": "no-referrer",
     "X-Content-Type-Options": "nosniff",

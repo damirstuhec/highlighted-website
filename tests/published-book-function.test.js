@@ -45,10 +45,25 @@ test("rejects malformed tokens, paths, methods, and pages before contacting orig
       onRequest(context(`https://usehighlighted.com/books/${token}?page=0`)),
       onRequest(context(`https://usehighlighted.com/books/${token}?page=10001`)),
       onRequest(context(`https://usehighlighted.com/books/${token}`, { request: { method: "POST" } })),
+      onRequest(context(`https://usehighlighted.com/books/${token}/download`, { request: { method: "POST" } })),
     ]);
-    assert.deepEqual(responses.map((response) => response.status), [404, 404, 404, 404, 404]);
+    assert.deepEqual(responses.map((response) => response.status), [404, 404, 404, 404, 404, 404]);
     assert.equal(calls, 0);
     assert.match(await responses[0].text(), /Page unavailable/);
+    assert.match(await responses[1].text(), /published-book-page\.css\?v=18/);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("does not expose unexpected origin failures", async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response("private origin failure", { status: 500 });
+
+  try {
+    const response = await onRequest(context(`https://usehighlighted.com/books/${token}`));
+    assert.equal(response.status, 404);
+    assert.doesNotMatch(await response.text(), /private origin failure/);
   } finally {
     globalThis.fetch = originalFetch;
   }
