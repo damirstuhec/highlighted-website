@@ -69,6 +69,42 @@ test("does not expose unexpected origin failures", async () => {
   }
 });
 
+test("only permits HTTPS origins, with HTTP limited to local development", async () => {
+  const originalFetch = globalThis.fetch;
+  const requests = [];
+  globalThis.fetch = async (url) => {
+    requests.push(url.href);
+    return new Response("<h1>Published</h1>", { status: 200 });
+  };
+
+  try {
+    const localResponse = await onRequest(context(
+      `https://usehighlighted.com/books/${token}`,
+      { env: { ...env, PUBLISHED_BOOK_ORIGIN: "http://localhost:8080" } }
+    ));
+    const rejectedResponses = await Promise.all([
+      onRequest(context(
+        `https://usehighlighted.com/books/${token}`,
+        { env: { ...env, PUBLISHED_BOOK_ORIGIN: "http://api.example.com" } }
+      )),
+      onRequest(context(
+        `https://usehighlighted.com/books/${token}`,
+        { env: { ...env, PUBLISHED_BOOK_ORIGIN: "ws://localhost" } }
+      )),
+      onRequest(context(
+        `https://usehighlighted.com/books/${token}`,
+        { env: { ...env, PUBLISHED_BOOK_ORIGIN: "ftp://127.0.0.1" } }
+      )),
+    ]);
+
+    assert.equal(localResponse.status, 200);
+    assert.deepEqual(requests, ["http://localhost:8080/web/published-book-pages/render"]);
+    assert.deepEqual(rejectedResponses.map((response) => response.status), [404, 404, 404]);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test("returns a branded private fallback when origin is unavailable", async () => {
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async () => { throw new Error("offline"); };

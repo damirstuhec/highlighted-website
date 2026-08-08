@@ -101,7 +101,8 @@ function originEndpoint(env, path) {
   if (!env.PUBLISHED_BOOK_ORIGIN || !env.PUBLISHED_BOOK_PROXY_SECRET) return null;
   try {
     const origin = new URL(env.PUBLISHED_BOOK_ORIGIN);
-    if (origin.protocol !== "https:" && origin.hostname !== "127.0.0.1" && origin.hostname !== "localhost") {
+    const isLoopback = origin.hostname === "127.0.0.1" || origin.hostname === "localhost";
+    if (origin.protocol !== "https:" && !(origin.protocol === "http:" && isLoopback)) {
       return null;
     }
     return new URL(path, origin.origin);
