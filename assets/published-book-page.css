@@ -228,6 +228,13 @@ h1 {
 .tag-teal { --tag-color: #30b0c7; }
 .tag-gray { --tag-color: #8e8e93; }
 
+.copyright-note {
+  margin: 28px 16px 0 34px;
+  color: var(--secondary);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
 .pagination {
   display: flex;
   justify-content: space-between;

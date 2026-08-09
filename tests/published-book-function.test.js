@@ -94,7 +94,7 @@ test("rejects malformed tokens, paths, methods, and pages before contacting orig
     assert.deepEqual(responses.map((response) => response.status), [404, 404, 404, 404, 404, 404]);
     assert.equal(calls, 0);
     assert.match(await responses[0].text(), /Page unavailable/);
-    assert.match(await responses[1].text(), /published-book-page\.css\?v=18/);
+    assert.match(await responses[1].text(), /published-book-page\.css\?v=19/);
   } finally {
     globalThis.fetch = originalFetch;
   }
