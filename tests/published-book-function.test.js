@@ -1,12 +1,56 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { onRequest } from "../functions/books/[[path]].js";
+import worker from "../worker.js";
 
 const token = "a".repeat(43);
 const env = {
   PUBLISHED_BOOK_ORIGIN: "https://api.example.com",
   PUBLISHED_BOOK_PROXY_SECRET: "proxy-secret",
 };
+
+test("routes book pages through the Worker and leaves static assets on their existing path", async () => {
+  const originalFetch = globalThis.fetch;
+  const assetRequests = [];
+  globalThis.fetch = async () => new Response("<h1>Published</h1>", { status: 200 });
+
+  try {
+    const executionPromises = [];
+    const workerEnv = {
+      ...env,
+      ASSETS: {
+        fetch(request) {
+          assetRequests.push(request.url);
+          return new Response("static asset");
+        },
+      },
+    };
+    const executionContext = {
+      waitUntil(promise) {
+        executionPromises.push(promise);
+      },
+    };
+
+    const bookResponse = await worker.fetch(
+      new Request(`https://usehighlighted.com/books/${token}`),
+      workerEnv,
+      executionContext
+    );
+    const assetResponse = await worker.fetch(
+      new Request("https://usehighlighted.com/robots.txt"),
+      workerEnv,
+      executionContext
+    );
+
+    assert.equal(bookResponse.status, 200);
+    assert.equal(await bookResponse.text(), "<h1>Published</h1>");
+    assert.equal(await assetResponse.text(), "static asset");
+    assert.deepEqual(assetRequests, ["https://usehighlighted.com/robots.txt"]);
+    await Promise.all(executionPromises);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
 
 test("proxies a valid public URL without putting its token in the origin URL", async () => {
   const originalFetch = globalThis.fetch;

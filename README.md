@@ -1,8 +1,8 @@
 # Highlighted — Landing Page
 
-Marketing site for the Highlighted iOS app, plus the minimal Cloudflare Pages
-Function that serves opt-in personal book-highlight pages. There is no application
-framework or build step.
+Marketing site for the Highlighted iOS app, plus the minimal Cloudflare Worker
+that serves opt-in personal book-highlight pages. There is no application framework
+or build step.
 
 Live: https://usehighlighted.com
 
@@ -10,28 +10,24 @@ Live: https://usehighlighted.com
 
 ## Hosting
 
-Hosted on **Cloudflare Pages** (free tier), deployed automatically from this Git repo.
-Every push to the `main` branch publishes within seconds. Pull requests get their
-own preview URLs.
+Hosted with **Cloudflare Workers Static Assets**, deployed automatically from this
+Git repo. Every push to the `main` branch publishes within seconds. Pull requests
+get their own preview versions.
 
-### Cloudflare Pages build settings
+### Cloudflare Workers configuration
 
-When connecting the repo (Workers & Pages → Create → Pages → Connect to Git):
+`wrangler.jsonc` keeps static files on Cloudflare's asset path and invokes the
+Worker only for `/books/*`. The Worker entrypoint forwards every other request to
+the static asset binding.
 
-| Setting                  | Value     |
-| ------------------------ | --------- |
-| Framework preset         | `None`    |
-| Build command            | *(empty)* |
-| Build output directory   | `/`       |
-| Root directory           | `/`       |
-
-There is no build process — Cloudflare just serves the files as-is.
+There is no application build process. Cloudflare uploads the static files and
+bundles the small Worker entrypoint during deployment.
 
 ### Custom domain
 
 `usehighlighted.com` (registrar: Porkbun). DNS is managed by Cloudflare
 (nameservers changed at Porkbun to point at Cloudflare). The domain is attached
-under the Pages project → Custom domains. HTTPS is provisioned automatically.
+to the Worker under Domains & Routes. HTTPS is provisioned automatically.
 
 `www.usehighlighted.com` redirects to the apex. Set this up as a **Redirect Rule**
 in the Cloudflare dashboard (Rules → Redirect Rules): redirect
@@ -89,9 +85,10 @@ The hero currently shows a placeholder where the portrait app-preview video goes
 ```
 index.html              The entire site (inline CSS/JS; icon, QR, App Store badge
                         embedded as data URIs — page renders without assets/).
+worker.js                Worker entrypoint that dispatches /books/* requests and
+                        otherwise preserves the static asset path.
 functions/books/         Validates public links and privately proxies rendering to
                         the Highlighted server. Tokens never appear in origin URLs.
-_routes.json             Runs the Pages Function only for /books/*.
 assets/
   published-book-page.css
                         Shared, app-matched styling for published highlight pages.
@@ -112,7 +109,7 @@ package.json            Dependency-free Node test command (`npm test`).
 > `assets/` are kept for reference and as source files. The one file the page
 > genuinely loads at runtime is the video, once added.
 
-The Pages deployment needs three environment variables: `PUBLISHED_BOOK_ORIGIN`
+The Worker needs three environment variables: `PUBLISHED_BOOK_ORIGIN`
 (the HTTPS server origin), `PUBLISHED_BOOK_PROXY_SECRET` (a shared high-entropy
 secret), and optionally `APP_STORE_URL` (defaults to Highlighted's current App
 Store URL). Configure the same proxy secret on the server. Run `npm test` to test
