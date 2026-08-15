@@ -110,9 +110,17 @@ package.json            Dependency-free Node test command (`npm test`).
 > genuinely loads at runtime is the video, once added.
 
 The Worker needs three environment variables: `PUBLISHED_BOOK_ORIGIN`
-(the HTTPS server origin), `PUBLISHED_BOOK_PROXY_SECRET` (a shared high-entropy
-secret), and optionally `APP_STORE_URL` (defaults to Highlighted's current App
-Store URL). Configure the same proxy secret on the server. Run `npm test` to test
-the public routing and privacy boundary. The Function also applies coarse
-per-isolate request limits; retain Cloudflare's managed abuse controls as the
-outer production defense.
+(the HTTPS server origin, not sensitive — committed in `wrangler.jsonc`'s `vars`
+so it survives every deploy), `PUBLISHED_BOOK_PROXY_SECRET` (a shared high-entropy
+secret — dashboard/Wrangler secret only, never committed), and optionally
+`APP_STORE_URL` (defaults to Highlighted's current App Store URL). Configure the
+same proxy secret on the server. Run `npm test` to test the public routing and
+privacy boundary. The Function also applies coarse per-isolate request limits;
+retain Cloudflare's managed abuse controls as the outer production defense.
+
+> `PUBLISHED_BOOK_ORIGIN` used to be dashboard-only, which meant every
+> `wrangler deploy` silently wiped it (dashboard-only variables that aren't
+> declared in `wrangler.jsonc` don't survive a deploy, unlike real secrets,
+> which Cloudflare stores independently of code). That caused published book
+> pages to intermittently show "Page unavailable" in production. Keep it in
+> `wrangler.jsonc` going forward instead of re-adding it via the dashboard.
