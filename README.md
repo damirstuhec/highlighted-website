@@ -118,6 +118,16 @@ same proxy secret on the server. Run `npm test` to test the public routing and
 privacy boundary. The Function also applies coarse per-isolate request limits;
 retain Cloudflare's managed abuse controls as the outer production defense.
 
+Published highlight and note formatting is rendered by the server's Leaf view.
+It validates the stored UTF-16 style runs and passes canonical text segments with
+fixed classes to the template. Leaf escapes each segment before rendering.
+`assets/published-book-page.css` displays bold,
+italic, underline, and strikethrough, including combined underline/strikethrough.
+The existing publication settings still control the first note and favorite
+marker. When changing this stylesheet, update its version query in both server
+views and the Worker's unavailable-page fallback so immutable asset caching does
+not retain older styles.
+
 > `PUBLISHED_BOOK_ORIGIN` used to be dashboard-only, which meant every
 > `wrangler deploy` silently wiped it (dashboard-only variables that aren't
 > declared in `wrangler.jsonc` don't survive a deploy, unlike real secrets,
