@@ -184,6 +184,12 @@ h1 {
   white-space: pre-wrap;
 }
 
+.text-bold { font-weight: 700; }
+.text-italic { font-style: italic; }
+.text-underline { text-decoration-line: underline; }
+.text-strikethrough { text-decoration-line: line-through; }
+.text-underline.text-strikethrough { text-decoration-line: underline line-through; }
+
 .highlight-page,
 .highlight-note {
   margin-top: 12px;
